@@ -38,7 +38,11 @@ PKGS=""
 for name in $PLUGIN_LIST; do
   f="$PLUGINS_DIR/$name/apt.txt"
   [ -f "$f" ] || continue
-  while IFS= read -r line; do
+  # Tolerate a CRLF checkout: a trailing \r rides along into the package name
+  # and apt fails with "Unable to locate package". The `|| [ -n "$line" ]` picks
+  # up a last line with no trailing newline, which plain `read` drops.
+  while IFS= read -r line || [ -n "$line" ]; do
+    line=$(printf '%s' "$line" | tr -d '\r')
     case "$line" in \#*|"") continue ;; esac
     PKGS="$PKGS $line"
   done < "$f"
@@ -46,7 +50,12 @@ done
 
 if [ -n "$PKGS" ]; then
   echo "[install-plugin-deps] Installing:$PKGS"
-  apt-get update && apt-get install -y $PKGS && rm -rf /var/lib/apt/lists/*
+  # Deliberately NOT an `a && b && c` chain: `set -e` does not abort on a
+  # non-final command of an AND-list, so a failed install used to exit 0 and the
+  # build happily produced an image missing every plugin's system packages.
+  apt-get update
+  apt-get install -y $PKGS
+  rm -rf /var/lib/apt/lists/*
 else
   echo "[install-plugin-deps] No apt dependencies"
 fi

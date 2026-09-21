@@ -2,6 +2,12 @@
 # CRLF breaks shebang lines in Linux containers (e.g. Docker builds)
 *.sh text eol=lf
 
+# Plugin apt.txt is read line-by-line by scripts/install-plugin-deps.sh and each
+# line is passed to apt-get as a package name. A CRLF checkout turns "x11vnc"
+# into "x11vnc\r", apt reports "Unable to locate package", and the image ships
+# without that plugin's system deps.
+apt.txt text eol=lf
+
 # JS/TS and other text files use native line endings
 *.js text
 *.ts text
