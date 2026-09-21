@@ -1,0 +1,79 @@
+# Watch the automation live, without it fighting your desktop.
+#
+# Camoufox runs on a virtual X display inside the container and noVNC serves that
+# screen over HTTP. You watch it in a browser tab and can alt-tab, take calls and
+# use your machine normally — host window focus is irrelevant, which is exactly
+# the problem that makes CAMOFOX_INTERACTIVE=desktop unusable for automation on
+# Windows (native mouse events only reach the foreground window).
+#
+#   docker compose up -d --build     start
+#   http://localhost:6080/vnc.html   watch (and click, for manual login)
+#   docker compose logs -f           server output
+#   docker compose down              stop
+#
+# The agent itself still runs on Windows and talks to http://localhost:9377.
+
+services:
+  camofox:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        # x86_64 for Intel/AMD; use arm64 on Apple silicon.
+        ARCH: x86_64
+    container_name: ezlynx-camofox
+    restart: unless-stopped
+
+    # Bound to 127.0.0.1 deliberately. noVNC runs WITHOUT a password by default,
+    # and this browser holds client PII — a bare "6080:6080" would publish a live,
+    # clickable session to every machine on the network. Keep it loopback-only
+    # unless you set VNC_PASSWORD and understand the exposure.
+    ports:
+      - "127.0.0.1:9377:9377"   # REST API — the agent talks to this
+      - "127.0.0.1:6080:6080"   # noVNC — open this in a browser to watch
+      - "127.0.0.1:5900:5900"   # raw VNC, if you prefer a native client
+
+    environment:
+      # --- live view ---
+      ENABLE_VNC: "1"
+      # Must be 0.0.0.0: the plugin defaults to 127.0.0.1, which inside a
+      # container means "unreachable from the host".
+      VNC_BIND: "0.0.0.0"
+      VNC_RESOLUTION: "1920x1080"
+      NOVNC_PORT: "6080"
+      VNC_PORT: "5900"
+      # Set VNC_PASSWORD to require a password; VIEW_ONLY=1 to make it watch-only.
+      # Leave VIEW_ONLY off — being able to click is what makes the one-time
+      # EZLynx login possible without the desktop/headless restart dance.
+
+      # --- required for client PII ---
+      CAMOFOX_CRASH_REPORT_ENABLED: "false"
+
+      # --- timeouts tuned for EZLynx ---
+      # Must exceed newPageTimeoutMs (45s in camofox.config.json).
+      HANDLER_TIMEOUT_MS: "90000"
+
+      # --- keep the session alive while you log in and watch ---
+      TAB_INACTIVITY_MS: "3600000"
+      SESSION_TIMEOUT_MS: "0"
+      BROWSER_IDLE_TIMEOUT_MS: "0"
+
+      NODE_ENV: "production"
+
+    volumes:
+      # The saved EZLynx session lives here. Without this you re-login on every
+      # `docker compose down`.
+      - camofox-profiles:/root/.camofox
+
+    # Firefox crashes with the default 64MB /dev/shm.
+    shm_size: "2gb"
+
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:9377/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+volumes:
+  camofox-profiles:

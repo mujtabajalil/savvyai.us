@@ -1,0 +1,37 @@
+{
+  "$comment": [
+    "Carrier registry, seeded from the recording. `id` is the EZLynx carrier id that",
+    "appears in toggle selectors (#carrier-{id}-{slug}-button) and in carrier-question",
+    "selector suffixes (__{id}). Regenerate/extend with scripts/build-flow-map.ts output.",
+    "",
+    "Selection strategy is select-all-then-prune (PLAN.md 7a): everything is selected,",
+    "then the recovery loop drops carriers that fail validation, each with a reason.",
+    "Use allow/deny in defaults.json to curate without touching code."
+  ],
+  "carriers": [
+    { "id": "13", "name": "Travelers", "lobs": ["auto", "home"] },
+    { "id": "25", "name": "Progressive", "lobs": ["auto"] },
+    { "id": "35", "name": "Liberty Mutual (Formerly Safeco)", "lobs": ["auto", "home"] },
+    { "id": "105", "name": "Auto-Owners Insurance Company", "lobs": ["auto", "home"] },
+    { "id": "196", "name": "ACUITY Insurance", "lobs": ["auto", "home"] },
+    { "id": "348", "name": "Nationwide Insurance", "lobs": ["auto", "home"] },
+    { "id": "377", "name": "Progressive Insurance Home", "lobs": ["home"] },
+    { "id": "425", "name": "Universal Property & Casualty Insurance Company", "lobs": ["home"] },
+    { "id": "545", "name": "Encova", "lobs": ["auto"] },
+    { "id": "610", "name": "Unknown (payer_type observed)", "lobs": [] },
+    { "id": "613", "name": "AAA – Auto Club Group – Insurance Link", "lobs": ["auto", "home"] },
+    { "id": "650", "name": "GEICO", "lobs": ["auto"] },
+    { "id": "692", "name": "The Hartford", "lobs": ["auto", "home"] }
+  ],
+  "priorCarrierAliases": {
+    "$comment": "Maps carrier display names onto #priorCarrier option text. The rating page and the prior-carrier dropdown do not agree.",
+    "geico": "Geico",
+    "liberty mutual formerly safeco": "Liberty Mutual",
+    "auto owners insurance company": "Auto-Owners",
+    "acuity insurance": "Acuity",
+    "nationwide insurance": "Nationwide",
+    "the hartford": "Hartford",
+    "aaa auto club group insurance link": "AAA",
+    "progressive insurance home": "Progressive"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "ezlynx-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EZLynx Auto + Home comparative-rater agent driving camofox-browser over REST",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "ezlynx-agent": "./dist/src/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "typecheck": "tsc -p . --noEmit",
+    "test": "npm run build && node --test \"dist/**/*.test.js\"",
+    "test:watch": "node --test --watch \"dist/**/*.test.js\"",
+    "spike:matselect": "node dist/scripts/spike-matselect.js",
+    "ezlynx": "node dist/src/cli.js",
+    "ezlynx:smoke": "node dist/scripts/smoke.js",
+    "flow:build": "node dist/scripts/build-flow-map.js",
+    "flow:redact": "node dist/scripts/redact-recording.js",
+    "discover": "node dist/scripts/discover-screen.js",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f camofox",
+    "watch": "node dist/scripts/watch.js"
+  },
+  "dependencies": {
+    "commander": "^13.0.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}

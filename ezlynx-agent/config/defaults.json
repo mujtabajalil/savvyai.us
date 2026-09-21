@@ -1,0 +1,45 @@
+{
+  "$comment": [
+    "Agency defaults, derived from ONE recorded client. Treat as editable policy, not truth.",
+    "Each entry is listed in PLAN.md section 7 for confirmation.",
+    "",
+    "Two sections, deliberately separated:",
+    "  quote  - values merged INTO the QuoteRequest (must match its shape)",
+    "  policy - how the agent behaves; never merged into the quote",
+    "",
+    "Client data (credit authorisation, years with carrier, dwelling values, occupation,",
+    "number of residents) is NOT here and must come from the input JSON."
+  ],
+
+  "quote": {
+    "bridgeEmailToCarriers": true,
+    "quoteAsPackage": true,
+    "newPolicyTerm": "12 Month",
+
+    "priorAuto": { "policyTerm": "12 Month" },
+    "priorHome": { "policyTerm": "12 Month" },
+
+    "homeCoverage": { "policyFormType": "HO3 - Dwelling" },
+
+    "carriers": {
+      "auto": { "mode": "all", "include": [], "exclude": [] },
+      "home": { "mode": "all", "include": [], "exclude": [] }
+    }
+  },
+
+  "policy": {
+    "effectiveDate": {
+      "$comment": "How to pick the new-policy effective date when the input does not supply a future one.",
+      "strategy": "prior-expiration",
+      "fallbackDaysFromToday": 30,
+      "minimumDaysFromToday": 1
+    },
+
+    "icq": {
+      "$comment": "Selector-keyed ICQ answers observed as agency-standard. Labels are useless here, so these are keyed by selector and merged into carrierAnswers.",
+      "#coverage_paperlessauto_common": "Yes",
+      "#resins": "Homeowner/Condo Insurance",
+      "#booktransfer_travlers": "No"
+    }
+  }
+}

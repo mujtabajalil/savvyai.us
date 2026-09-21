@@ -42,3 +42,14 @@ fly.toml
 # Test artifacts
 test-results/
 playwright-report/
+
+# ezlynx-agent — real client PII and run output, never commit
+fixtures/private/
+ezlynx-agent/fixtures/private/
+ezlynx-agent/results/
+ezlynx-agent/debug/
+ezlynx-agent/discovery/
+# Working quote/input files hold client data. examples/ is synthetic and stays tracked.
+ezlynx-agent/quote.json
+ezlynx-agent/*.quote.json
+ezlynx-agent/client*.json

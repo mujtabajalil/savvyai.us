@@ -1,0 +1,132 @@
+{
+  "_comment": [
+    "Deliberately fake test applicant for dry runs. Safe to commit - no real person.",
+    "",
+    "WARNING: --dry-run never submits to carriers, but it DOES create a real",
+    "applicant record in EZLynx. Keep this data obviously fake so the record is",
+    "recognisable as a test and easy to delete afterwards.",
+    "",
+    "creditAuthorization is set true only because this is synthetic data. For a",
+    "real client it must reflect actual authorisation obtained from them.",
+    "",
+    "maritalStatus is 'Single' ON PURPOSE, and this is a WORKAROUND, not a fix:",
+    "setting it to 'Married' makes EZLynx create a hidden (visibility:hidden),",
+    "REQUIRED spouse-contact row that cannot be filled, which blocks the save.",
+    "Verified by A/B test: Married -> hidden contact row; Single -> no row.",
+    "A real married client will hit this. See README 'Known limits'."
+  ],
+  "ratingState": "MN",
+  "effectiveDate": "12/01/2026",
+  "newPolicyTerm": "12 Month",
+  "quoteAsPackage": true,
+  "bridgeEmailToCarriers": true,
+  "applicant": {
+    "firstName": "Testapp",
+    "lastName": "Zzztestrecord",
+    "gender": "Male",
+    "dateOfBirth": "03/14/1975",
+    "maritalStatus": "Single",
+    "education": "Some College - No Degree",
+    "industry": "Retired",
+    "occupation": "Retired",
+    "email": "testapp.zzztestrecord@example.org",
+    "phone": "(612) 555-0142"
+  },
+  "address": {
+    "line1": "1 Alder Way",
+    "city": "ANDOVER",
+    "state": "MN",
+    "postalCode": "55304",
+    "county": "Anoka",
+    "yearsAtAddress": 5,
+    "monthsAtAddress": 0
+  },
+  "drivers": [
+    {
+      "firstName": "Testapp",
+      "lastName": "Zzztestrecord",
+      "gender": "Male",
+      "dateOfBirth": "03/14/1975",
+      "maritalStatus": "Single",
+      "relationship": "Insured",
+      "industry": "Retired",
+      "occupation": "Retired",
+      "driversLicenseNumber": "M111222333444",
+      "driversLicenseState": "MN",
+      "driversLicenseStatus": "Valid",
+      "ageFirstLicensed": 16
+    }
+  ],
+  "vehicles": [
+    {
+      "vin": "1HGCM82633A004352",
+      "use": "To/From Work",
+      "oneWayMiles": 12,
+      "daysPerWeek": 5,
+      "weeksPerMonth": 4,
+      "ownership": "Owned",
+      "comprehensiveDeductible": "500",
+      "collisionDeductible": "500"
+    }
+  ],
+  "driverVehicleAssignment": [
+    [
+      100
+    ]
+  ],
+  "priorAuto": {
+    "carrier": "Progressive",
+    "expirationDate": "12/01/2026",
+    "liabilityLimits": "100/300",
+    "policyTerm": "12 Month",
+    "yearsWithCarrier": 3,
+    "monthsWithCarrier": 0,
+    "yearsContinuousCoverage": 5,
+    "monthsContinuousCoverage": 0
+  },
+  "autoCoverage": {
+    "bodilyInjury": "100/300",
+    "propertyDamage": "100",
+    "uninsuredMotorist": "100/300",
+    "underinsuredMotorist": "100/300",
+    "medicalPayments": "5000",
+    "applyToAllVehicles": true
+  },
+  "dwelling": {
+    "usage": "Primary",
+    "occupancy": "Owner Occupied",
+    "dwellingType": "Single Family",
+    "numberOfOccupants": 2,
+    "stories": "1",
+    "squareFeet": 2400,
+    "yearBuilt": 1998,
+    "construction": "Frame",
+    "roofType": "Architectural Shingle",
+    "foundation": "Basement",
+    "fullBaths": 2,
+    "halfBaths": 1,
+    "heating": "Forced Air",
+    "garageType": "2-Car-Attached",
+    "estimatedReplacementCost": 485000,
+    "marketValue": 520000
+  },
+  "homeCoverage": {
+    "dwelling": 485000,
+    "policyFormType": "HO3 - Dwelling",
+    "personalLiability": "300000",
+    "medicalPayments": "5000",
+    "allPerilsDeductible": "1000"
+  },
+  "household": {
+    "dogs": false,
+    "pool": false,
+    "trampoline": false,
+    "businessOnPremises": false,
+    "numberOfResidents": 2
+  },
+  "creditAuthorization": {
+    "authorized": true,
+    "obtainedFrom": "synthetic test record \u2014 not a real client",
+    "obtainedOn": "09/16/2026"
+  }
+}
