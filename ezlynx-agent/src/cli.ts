@@ -278,7 +278,10 @@ program
       tabId: tab.tabId,
       quote,
       logger,
-      recovery: { ...(llm ? { llm } : {}), logger, askHuman: makeAskHuman(logger) },
+      // Nothing can be asked without a terminal (the MCP server runs this headless),
+      // and a readline prompt on a closed stdin never returns. No askHuman means
+      // recovery stops with the question in the log instead of hanging on it.
+      recovery: { ...(llm ? { llm } : {}), logger, ...(process.stdin.isTTY ? { askHuman: makeAskHuman(logger) } : {}) },
       dryRun: options.dryRun,
       droppedCarriers: [],
       flags: [],
@@ -398,9 +401,16 @@ program
           }),
         );
 
-        if (config.requireSubmitConfirmation && !(await confirm('Submit to carriers?'))) {
-          print('Aborted — nothing submitted.');
-          return 0;
+        if (config.requireSubmitConfirmation) {
+          if (!process.stdin.isTTY) {
+            print('\nRefusing to submit: confirmation is required and there is no terminal to ask at.');
+            print('Set REQUIRE_SUBMIT_CONFIRMATION=false for an unattended run you trust.');
+            return 1;
+          }
+          if (!(await confirm('Submit to carriers?'))) {
+            print('Aborted — nothing submitted.');
+            return 0;
+          }
         }
 
         await client.click(tab.tabId, { selector: '#submit-to-carriers-btn' });
