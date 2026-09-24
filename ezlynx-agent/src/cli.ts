@@ -238,7 +238,7 @@ program
       await client.health();
     } catch {
       print(`\nCannot reach camofox at ${config.camofoxUrl}.`);
-      print('Start it from the repo root, e.g.  CAMOFOX_INTERACTIVE=desktop npm start\n');
+      print('Start it from camofox/, e.g.  CAMOFOX_INTERACTIVE=desktop npm start\n');
       process.exit(3);
     }
 

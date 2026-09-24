@@ -5,7 +5,7 @@ Connect the VPN first. Two terminals: **A** = server (leave running), **B** = ag
 ## A — start server (headless, for automation)
 
 ```cmd
-cd /d c:\Users\absir\Desktop\SAVV\camofox-browser && set "CAMOFOX_INTERACTIVE=off" && set "CAMOFOX_CRASH_REPORT_ENABLED=false" && set "HANDLER_TIMEOUT_MS=90000" && npm start
+cd /d c:\Users\absir\Desktop\SAVV\camofox-browser\camofox && set "CAMOFOX_INTERACTIVE=off" && set "CAMOFOX_CRASH_REPORT_ENABLED=false" && set "HANDLER_TIMEOUT_MS=90000" && npm start
 ```
 
 `HANDLER_TIMEOUT_MS` must exceed `newPageTimeoutMs` (45s in `camofox.config.json`);
@@ -24,7 +24,7 @@ Valid → skip to Run. Expired → do Login.
 Restart **A** in desktop mode:
 
 ```cmd
-cd /d c:\Users\absir\Desktop\SAVV\camofox-browser && set "CAMOFOX_INTERACTIVE=desktop" && set "CAMOFOX_CRASH_REPORT_ENABLED=false" && set "HANDLER_TIMEOUT_MS=90000" && npm start
+cd /d c:\Users\absir\Desktop\SAVV\camofox-browser\camofox && set "CAMOFOX_INTERACTIVE=desktop" && set "CAMOFOX_CRASH_REPORT_ENABLED=false" && set "HANDLER_TIMEOUT_MS=90000" && npm start
 ```
 
 Then **B** (a window opens; it waits for you — password only, no MFA):

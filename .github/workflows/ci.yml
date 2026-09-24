@@ -9,6 +9,9 @@ on:
 jobs:
   unit:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: camofox
     strategy:
       matrix:
         node-version: [24]
@@ -20,6 +23,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
+          cache-dependency-path: camofox/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -48,6 +52,9 @@ jobs:
 
   windows-process-cleanup:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: camofox
     steps:
       - uses: actions/checkout@v4
 
@@ -56,6 +63,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: camofox/package-lock.json
 
       - name: Install dependencies
         run: |
@@ -75,6 +83,9 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: camofox
     strategy:
       matrix:
         node-version: [24]
@@ -86,6 +97,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
+          cache-dependency-path: camofox/package-lock.json
 
       - name: Install dependencies
         run: |
@@ -97,7 +109,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('camofox/package-lock.json') }}
 
       - name: Install browser
         if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -127,6 +139,9 @@ jobs:
 
   windows-e2e:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: camofox
     steps:
       - uses: actions/checkout@v4
 
@@ -135,6 +150,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: camofox/package-lock.json
 
       - name: Install dependencies
         run: |

@@ -12,6 +12,9 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: camofox
     steps:
       - uses: actions/checkout@v4
 
@@ -19,6 +22,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: camofox/package-lock.json
 
       - run: npm ci
 
@@ -45,7 +49,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('camofox/package-lock.json') }}
 
       - name: Install browser
         if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -76,6 +80,9 @@ jobs:
   publish:
     needs: test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: camofox
     permissions:
       contents: read
       id-token: write
@@ -107,7 +114,7 @@ jobs:
         run: npm publish --provenance --access public
 
       - name: Publish standalone MCP package with provenance
-        working-directory: mcp
+        working-directory: camofox/mcp
         run: npm publish --provenance --access public
 
   notify-agenthook:

@@ -16,7 +16,7 @@
 services:
   camofox:
     build:
-      context: ..
+      context: ../camofox
       dockerfile: Dockerfile
       args:
         # x86_64 for Intel/AMD; use arm64 on Apple silicon.

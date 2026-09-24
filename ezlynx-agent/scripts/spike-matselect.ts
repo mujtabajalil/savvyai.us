@@ -72,7 +72,7 @@ async function main(): Promise<number> {
     await client.health();
   } catch (err) {
     print(`\nCannot reach camofox at ${config.camofoxUrl}.`);
-    print('Start it first, e.g.  CAMOFOX_INTERACTIVE=desktop npm start  (from the repo root)\n');
+    print('Start it first, e.g.  cd ../camofox && CAMOFOX_INTERACTIVE=desktop npm start\n');
     logger.error('health check failed', { error: String(err) });
     return 3;
   }

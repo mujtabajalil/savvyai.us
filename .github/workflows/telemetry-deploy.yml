@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
     paths:
-      - 'workers/crash-reporter/**'
+      - 'camofox/workers/crash-reporter/**'
   workflow_dispatch: # manual trigger for initial deploy / redeploy
 
 jobs:
@@ -17,16 +17,16 @@ jobs:
       - name: Inject source verification hashes
         run: |
           COMMIT=$(git rev-parse --short HEAD)
-          HASH=$(sha256sum workers/crash-reporter/index.ts | cut -d' ' -f1)
-          sed -i "s/__COMMIT_SHA__/$COMMIT/" workers/crash-reporter/index.ts
-          sed -i "s/__SOURCE_SHA256__/$HASH/" workers/crash-reporter/index.ts
+          HASH=$(sha256sum camofox/workers/crash-reporter/index.ts | cut -d' ' -f1)
+          sed -i "s/__COMMIT_SHA__/$COMMIT/" camofox/workers/crash-reporter/index.ts
+          sed -i "s/__SOURCE_SHA256__/$HASH/" camofox/workers/crash-reporter/index.ts
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3.14.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: workers/crash-reporter
+          workingDirectory: camofox/workers/crash-reporter
 
   notify-agenthook:
     needs: [deploy]

@@ -20,7 +20,7 @@ coverage/
 # Build
 dist/
 build/
-/plugin.js.map
+/camofox/plugin.js.map
 
 # IDE
 .idea/

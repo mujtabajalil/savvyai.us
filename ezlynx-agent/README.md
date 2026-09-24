@@ -102,10 +102,10 @@ Two camofox defaults fight the manual-login flow and must be relaxed for this on
 | `BROWSER_IDLE_TIMEOUT_MS=300000` | the browser shuts down 5 minutes after the last session closes |
 | `SESSION_TIMEOUT_MS=600000` | the session expires while you are still typing |
 
-1. Start camofox in **login mode** — desktop window, reapers relaxed (cmd, from the repo root):
+1. Start camofox in **login mode** — desktop window, reapers relaxed (cmd, from camofox/):
 
    ```cmd
-   cd /d <repo> && set "CAMOFOX_INTERACTIVE=desktop" && set "CAMOFOX_CRASH_REPORT_ENABLED=false" && set "TAB_INACTIVITY_MS=3600000" && set "SESSION_TIMEOUT_MS=0" && set "BROWSER_IDLE_TIMEOUT_MS=0" && npm start
+   cd /d <repo>\camofox && set "CAMOFOX_INTERACTIVE=desktop" && set "CAMOFOX_CRASH_REPORT_ENABLED=false" && set "TAB_INACTIVITY_MS=3600000" && set "SESSION_TIMEOUT_MS=0" && set "BROWSER_IDLE_TIMEOUT_MS=0" && npm start
    ```
 
    `SESSION_TIMEOUT_MS=0` and `BROWSER_IDLE_TIMEOUT_MS=0` disable those timers entirely.

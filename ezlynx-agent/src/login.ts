@@ -71,7 +71,7 @@ export async function interactiveLogin(options: LoginOptions): Promise<boolean> 
   print('Log in there, including MFA if prompted. Nothing is typed for you.');
   print('');
   print('If no window appeared, camofox is not running in desktop mode. Restart it with:');
-  print('  set "CAMOFOX_INTERACTIVE=desktop" && npm start     (from the repo root)');
+  print('  set "CAMOFOX_INTERACTIVE=desktop" && npm start     (from camofox/)');
   print('');
   print('Waiting for you to finish...');
 
