@@ -1,0 +1,15 @@
+[project]
+name = "savvy-backend"
+version = "0.1.0"
+description = "EZLynx connection API: stores the credentials, drives camofox, asks for the one-time code once"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "httpx",
+    "cryptography",
+    "fastmcp",
+]
+
+[dependency-groups]
+dev = ["pytest"]

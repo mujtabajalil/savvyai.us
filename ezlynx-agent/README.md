@@ -92,7 +92,9 @@ server process. Startup fails if it is not exactly `false`.
 
 ## First-time login
 
-Credential entry and MFA are **never automated**.
+Credential entry and MFA are **never automated here**. The CLI only opens the window and
+waits. `backend/` does automate it for the web app — it stores the credentials and types
+the one-time code you paste in — and both paths end at the same saved camofox session.
 
 Two camofox defaults fight the manual-login flow and must be relaxed for this one step:
 

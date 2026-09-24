@@ -214,8 +214,9 @@ Client data is the main risk here, so several things are structural rather than 
   pages contain client information, so the agent refuses to start unless it's disabled.
 - **Nothing is submitted without confirmation.** Submitting can trigger credit checks on a real
   person, so the agent prints a full summary and waits for you to type `y`.
-- **Passwords and MFA are never automated.** You log in by hand once; the browser session is saved
-  and reused.
+- **The CLI never automates passwords or MFA.** You log in by hand once; the browser session is
+  saved and reused. `backend/` (FastAPI, SQLite) does replay stored credentials for the web app,
+  sealed with AES-256-GCM, and asks the agent for the one-time code the first time only.
 - **Test mode still writes to EZLynx.** A dry run never contacts a carrier, but every "Next" click
   genuinely saves. There's no way around that, so the supplied test data is obviously fake.
 
