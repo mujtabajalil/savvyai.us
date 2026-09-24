@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="frontend/public/favicon.svg" alt="Savvital" width="72" height="72">
+
 # savvy-ai
 
 **EZLynx Auto + Home quoting, run by an agent, approved by a human.**
