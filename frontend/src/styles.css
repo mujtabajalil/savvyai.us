@@ -1,0 +1,314 @@
+/* Tokens and primitives from ../../DESIGN.md. Components must never hardcode a hex. */
+
+/* ── tokens ─────────────────────────────────────────────────── DESIGN.md §10 */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --paper: #FFFFFF; --sheet: #FFFFFF; --mat: #E6F0F0; --wash: #F8FEE9; --mist: #F2F8F7;
+  --rule: #E5E7EB; --rule-strong: #748E8F;
+  --ink: #033233; --ink-2: #355B5C; --ink-3: #4F7070;
+  --action: #006965; --action-hover: #033233; --on-action: #FFFFFF;
+  --mark: #E3FF91; --on-mark: #033233;
+  --violet: #7E5AFF; --violet-text: #6B4CD9; --violet-tint: #F0EBFF;
+  --ok: #006965; --ok-tint: #E0EDED;
+  --warn: #92400E; --warn-fill: #F59E0B; --warn-tint: #FEF3E2;
+  --bad: #B91C1C; --bad-tint: #F7E4E4;
+  --float: 0 1px 2px rgb(3 50 51 / 0.08), 0 12px 32px -8px rgb(3 50 51 / 0.24);
+  --scrim: rgb(3 50 51 / 0.44);
+  /* light swaps the blooms for sweeping ribbons (chat.ts), which read on white */
+  --glow-1: transparent; --glow-2: transparent;
+  --ribbon-1: color-mix(in oklab, var(--mark) 70%, transparent);
+  --ribbon-2: color-mix(in oklab, var(--action) 7%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #033233; --sheet: #123E3F; --mat: #022425; --wash: #15423B; --mist: #0D3A3B;
+    --rule: #295152; --rule-strong: #748E8F;
+    --ink: #FFFFFF; --ink-2: #B3C2C2; --ink-3: #9AADAD;
+    --action: #E3FF91; --action-hover: #F8FEE9; --on-action: #033233;
+    --mark: #E3FF91; --on-mark: #033233;
+    --violet: #7E5AFF; --violet-text: #B29CFF; --violet-tint: #193958;
+    --ok: #8CBCBA; --ok-tint: #1C4B4B;
+    --warn: #F59E0B; --warn-fill: #F59E0B; --warn-tint: #2F452C;
+    --bad: #FCA5A5; --bad-tint: #304748;
+    --float: 0 12px 32px -8px rgb(0 0 0 / 0.5);
+    --scrim: rgb(0 0 0 / 0.6);
+    --glow-1: color-mix(in oklab, var(--wash) 85%, var(--paper));
+    --glow-2: color-mix(in oklab, var(--mat) 80%, var(--paper));
+    --ribbon-1: transparent; --ribbon-2: transparent;
+  }
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #033233; --sheet: #123E3F; --mat: #022425; --wash: #15423B; --mist: #0D3A3B;
+  --rule: #295152; --rule-strong: #748E8F;
+  --ink: #FFFFFF; --ink-2: #B3C2C2; --ink-3: #9AADAD;
+  --action: #E3FF91; --action-hover: #F8FEE9; --on-action: #033233;
+  --mark: #E3FF91; --on-mark: #033233;
+  --violet: #7E5AFF; --violet-text: #B29CFF; --violet-tint: #193958;
+  --ok: #8CBCBA; --ok-tint: #1C4B4B;
+  --warn: #F59E0B; --warn-fill: #F59E0B; --warn-tint: #2F452C;
+  --bad: #FCA5A5; --bad-tint: #304748;
+  --float: 0 12px 32px -8px rgb(0 0 0 / 0.5);
+  --scrim: rgb(0 0 0 / 0.6);
+  --glow-1: color-mix(in oklab, var(--wash) 85%, var(--paper));
+  --glow-2: color-mix(in oklab, var(--mat) 80%, var(--paper));
+  --ribbon-1: transparent; --ribbon-2: transparent;
+}
+
+:root {
+  --ff-head: "Literata Variable", "Literata", Georgia, serif;
+  --ff-text: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --ff-code: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --s-1: 0.25rem; --s-2: 0.5rem; --s-3: 0.75rem; --s-4: 1rem; --s-5: 1.5rem;
+  --s-6: 2rem; --s-7: 3rem; --s-8: 4rem; --s-9: 6rem; --s-10: 9rem;
+  --section: clamp(4rem, 2rem + 6vw, 9rem);
+  --measure: 36rem;
+  --r-tag: 4px; --r-control: 6px; --r-card: 10px; --r-mat: 16px;
+  --nav-h: 64px;
+  --page-pad: clamp(1.25rem, 4vw, 3rem);
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --t-press: 120ms; --t-state: 180ms; --t-open: 320ms;
+}
+
+/* ── base ────────────────────────────────────────────────────── DESIGN.md §3 */
+*, *::before, *::after { box-sizing: border-box; border-color: var(--rule); }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; }
+body, [data-theme] { background: var(--paper); color: var(--ink-2); font: 400 1.125rem/1.6 var(--ff-text); }
+
+h1, h2, h3, .display { color: var(--ink); font-family: var(--ff-head); text-wrap: balance; margin: 0; }
+h1, h2, .display { font-variation-settings: "opsz" 36; }
+.display { font-size: clamp(2.75rem, 1.9rem + 3.6vw, 4.5rem); line-height: 1.04; font-weight: 480; letter-spacing: -0.015em; }
+h1 { font-size: clamp(2.25rem, 1.9rem + 1.5vw, 3rem); line-height: 1.08; font-weight: 500; letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem); line-height: 1.15; font-weight: 540; letter-spacing: -0.005em; }
+h3 { font-size: clamp(1.3125rem, 1.2rem + 0.5vw, 1.5rem); line-height: 1.25; font-weight: 600; }
+.lead { font-family: var(--ff-head); font-size: 1.3125rem; line-height: 1.45; font-weight: 400; }
+.ui { font-size: 1rem; line-height: 1.35; font-weight: 600; }
+.small { font-size: 0.875rem; line-height: 1.45; font-weight: 400; }
+
+p { max-inline-size: var(--measure); text-wrap: pretty; margin: 0; }
+ul, ol { margin: 0; }
+
+a {
+  color: var(--action);
+  text-decoration-line: underline; text-decoration-thickness: 1px;
+  text-decoration-color: var(--rule-strong); text-underline-offset: 0.2em;
+}
+a:hover { text-decoration-color: currentColor; text-decoration-thickness: 2px; }
+a:not(.btn):not(.nav-link):not(.brand):not(.convo):focus-visible { background: var(--mark); color: var(--on-mark); }
+:focus-visible { outline: 2px solid var(--action); outline-offset: 2px; }
+::selection { background: var(--mark); color: var(--on-mark); }
+table, .price { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important; animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important; transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── layout ──────────────────────────────────────────────────── DESIGN.md §4 */
+.page { max-inline-size: 72rem; margin-inline: auto; padding-inline: var(--page-pad); }
+.section { padding-block: var(--section); scroll-margin-block-start: 64px; }
+.stack { display: grid; gap: var(--s-4); justify-items: start; }
+.sr-only {
+  position: absolute; inline-size: 1px; block-size: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* ── buttons ─────────────────────────────────────────────────── DESIGN.md §6 */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  block-size: 44px; padding-inline: 20px;
+  border: 1px solid transparent; border-radius: var(--r-control);
+  font: 600 1rem/1.35 var(--ff-text); text-decoration: none; cursor: pointer;
+  transition: background-color var(--t-state) var(--ease), border-color var(--t-state) var(--ease);
+}
+.btn-primary { background: var(--action); color: var(--on-action); }
+.btn-primary:hover { background: var(--action-hover); }
+.btn-secondary { background: none; color: var(--ink); border-color: var(--rule-strong); }
+.btn-secondary:hover { background: var(--mist); }
+.btn:disabled { background: var(--mat); color: var(--ink-3); border-color: transparent; cursor: not-allowed; }
+.btn-nav { block-size: 36px; padding-inline: 14px; white-space: nowrap; }
+
+/* ── forms ───────────────────────────────────────────────────── DESIGN.md §6 */
+.field { display: grid; gap: var(--s-2); max-inline-size: 26rem; }
+.field label { color: var(--ink); font: 600 1rem/1.35 var(--ff-text); }
+.field input, .field textarea {
+  inline-size: 100%; padding: 10px 12px;
+  background: var(--sheet); color: var(--ink);
+  border: 1px solid var(--rule-strong); border-radius: var(--r-control);
+  font: 400 1rem/1.35 var(--ff-text);
+}
+.field input { block-size: 44px; }
+.field textarea { resize: vertical; line-height: 1.5; }
+.field input::placeholder, .field textarea::placeholder { color: var(--ink-3); }
+.field input[aria-invalid="true"] { border-color: var(--bad); }
+.field .help { color: var(--ink-3); font-size: 0.875rem; line-height: 1.45; }
+.field .error { color: var(--bad); font-size: 0.875rem; line-height: 1.45; }
+input, textarea { accent-color: var(--action); }
+
+/* ── nav ─────────────────────────────────────────────────────── DESIGN.md §6 */
+.nav {
+  position: sticky; inset-block-start: 0; z-index: 10; background: var(--paper);
+  /* border-box, so the 1px edge sits inside --nav-h and calc(100dvh - --nav-h) stays exact */
+  block-size: var(--nav-h);
+  border-block-end: 1px solid transparent; transition: border-color var(--t-state) var(--ease);
+}
+.nav[data-scrolled="true"] { border-block-end-color: var(--rule); }
+.nav-inner { display: flex; align-items: center; gap: var(--s-5); block-size: 100%; }
+.brand {
+  margin-inline-end: auto; color: var(--ink); text-decoration: none;
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font: 600 1.125rem/1 var(--ff-head);
+}
+[data-theme="dark"] .brand { color: var(--mark); }
+/* The shield (logo-mark.ts). Only it glows: a lime light that hugs its silhouette,
+   tight rim plus soft falloff, eased in rather than switched on. On light it is the
+   stronger lime, so it still reads as light against a pale surface. */
+.brand .mark {
+  flex: none; inline-size: 26px; block-size: 28px;
+  color: light-dark(var(--ink), var(--mark));
+  --glow-rim: light-dark(var(--mark), color-mix(in oklab, var(--mark) 85%, transparent));
+  --glow-fall: light-dark(color-mix(in oklab, var(--mark) 90%, transparent),
+                          color-mix(in oklab, var(--mark) 45%, transparent));
+  filter: drop-shadow(0 0 0 transparent) drop-shadow(0 0 0 transparent);
+  transition: filter var(--t-open) var(--ease);
+}
+.brand:hover .mark, .brand:focus-visible .mark {
+  filter: drop-shadow(0 0 2px var(--glow-rim)) drop-shadow(0 0 10px var(--glow-fall));
+}
+.nav-link {
+  color: var(--ink-2); text-decoration: none; padding-block: var(--s-1);
+  border-block-end: 2px solid transparent; white-space: nowrap;
+  font: 500 1rem/1.35 var(--ff-text);
+}
+.nav-link:hover { color: var(--ink); }
+.nav-link[aria-current] { color: var(--ink); border-block-end-color: var(--ink); }
+
+/* ── exhibit ─────────────────────────────────────────────────── DESIGN.md §6 */
+.exhibit { margin: 0; background: var(--mat); border-radius: var(--r-mat); padding: clamp(12px, 2vw, 24px); }
+.artifact {
+  position: relative; background: var(--sheet);
+  border: 1px solid var(--rule); border-radius: var(--r-control); overflow: hidden;
+}
+.pin {
+  display: grid; place-items: center; inline-size: 28px; block-size: 28px;
+  border-radius: 999px; background: var(--mark); color: var(--on-mark);
+  box-shadow: 0 0 0 2px var(--on-mark);
+  font: 700 13px/1 var(--ff-text);
+  transition: box-shadow var(--t-state) var(--ease);
+}
+.artifact .pin {
+  position: absolute; inset-inline-start: var(--x); inset-block-start: var(--y);
+  translate: -50% -50%;
+  animation: stamp var(--t-state) var(--ease) backwards;
+}
+.artifact .pin:nth-of-type(2) { animation-delay: 90ms; }
+.artifact .pin:nth-of-type(3) { animation-delay: 180ms; }
+@keyframes stamp { from { opacity: 0; scale: 0.6; } }
+
+.key { display: grid; gap: var(--s-3); margin-block-start: var(--s-4); padding: 0; list-style: none; }
+.key li { display: flex; align-items: start; gap: var(--s-3); color: var(--ink-2); font-size: 0.875rem; line-height: 1.45; }
+.key .pin { inline-size: 20px; block-size: 20px; font-size: 11px; flex: none; margin-block-start: 1px; }
+
+/* Hovering a key item haloes its pin, and the reverse. Letters, not a sequence. */
+.exhibit:has([data-mark="A"]:hover) [data-mark="A"],
+.exhibit:has([data-mark="B"]:hover) [data-mark="B"],
+.exhibit:has([data-mark="C"]:hover) [data-mark="C"] {
+  box-shadow: 0 0 0 2px var(--on-mark), 0 0 0 6px var(--mark);
+}
+
+/* ── tables ──────────────────────────────────────────────────── DESIGN.md §6 */
+.table { inline-size: 100%; border-collapse: collapse; }
+.table th {
+  background: var(--mat); color: var(--ink-2); text-align: start;
+  padding: var(--s-3) var(--s-4); font: 700 0.875rem/1.45 var(--ff-text); white-space: nowrap;
+}
+.table td {
+  block-size: 48px; padding: var(--s-3) var(--s-4);
+  border-block-start: 1px solid var(--rule);
+  color: var(--ink-2); font-size: 0.875rem; white-space: nowrap;
+}
+.table .num { text-align: end; }
+.table .name { color: var(--ink); font-weight: 600; }
+
+/* ── tags, cards, notices ────────────────────────────────────── DESIGN.md §6 */
+.tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px;
+  border-radius: var(--r-tag); font: 700 0.75rem/1 var(--ff-text); letter-spacing: 0.02em;
+}
+.tag::before { content: ""; inline-size: 6px; block-size: 6px; border-radius: 999px; background: currentColor; }
+.tag-ok { background: var(--ok-tint); color: var(--ok); }
+.tag-warn { background: var(--warn-tint); color: var(--warn); }
+.tag-bad { background: var(--bad-tint); color: var(--bad); }
+
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: var(--r-card); padding: var(--s-6); }
+
+.notice {
+  display: flex; align-items: start; gap: var(--s-3);
+  padding: var(--s-4); border-radius: var(--r-card);
+  color: var(--ink); font-size: 0.9375rem; line-height: 1.5;
+}
+.notice svg { inline-size: 20px; block-size: 20px; flex: none; margin-block-start: 2px; }
+.notice-warn { background: var(--warn-tint); color: var(--ink); }
+.notice-warn svg { color: var(--warn); }
+.notice-ok { background: var(--ok-tint); }
+.notice-ok svg { color: var(--ok); }
+
+/* ── prose: rendered markdown from the agent ─────────────── DESIGN.md §3, §6 */
+.prose { max-inline-size: var(--measure); }
+.prose > * + * { margin-block-start: var(--s-4); }
+.prose p { max-inline-size: none; }
+.prose strong { font-weight: 700; color: var(--ink); }
+.prose em { font-style: italic; }
+
+/* markdown headings sit inside a message, so they step down from the page scale */
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  font-family: var(--ff-head); color: var(--ink);
+  font-variation-settings: normal; letter-spacing: 0;
+  margin-block-start: var(--s-5);
+}
+.prose h1, .prose h2 { font-size: 1.3125rem; line-height: 1.25; font-weight: 600; }
+.prose h3, .prose h4, .prose h5, .prose h6 { font-size: 1.0625rem; line-height: 1.3; font-weight: 600; }
+
+.prose ul, .prose ol { padding-inline-start: var(--s-5); display: grid; gap: var(--s-2); }
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+.prose li::marker { color: var(--ink-3); }
+.prose li > ul, .prose li > ol { margin-block-start: var(--s-2); }
+
+.prose code {
+  font: 0.875em/1.4 var(--ff-code);
+  background: var(--mat); border-radius: var(--r-tag); padding: 2px 5px;
+}
+/* code blocks get their own scroller rather than widening the message */
+.prose pre {
+  margin: 0; padding: var(--s-4); overflow-x: auto;
+  background: var(--mat); border-radius: var(--r-card);
+}
+.prose pre code { background: none; padding: 0; font-size: 0.8125rem; line-height: 1.6; }
+
+.prose blockquote {
+  margin: 0; padding-inline-start: var(--s-4);
+  border-inline-start: 2px solid var(--rule-strong); color: var(--ink-3);
+}
+.prose hr { border: 0; border-block-start: 1px solid var(--rule); }
+
+.prose table { inline-size: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.prose th {
+  background: var(--mat); color: var(--ink-2); text-align: start;
+  padding: var(--s-2) var(--s-3); font-weight: 700;
+}
+.prose td { padding: var(--s-2) var(--s-3); border-block-start: 1px solid var(--rule); }
+
+/* ── terminal output: literal, so monospace ──────────────────── DESIGN.md §3 */
+.terminal {
+  margin: 0; padding: var(--s-5); overflow-x: auto;
+  color: var(--ink-2); font: 400 0.8125rem/1.7 var(--ff-code); tab-size: 2;
+}
+.terminal b { color: var(--ink); font-weight: 700; }

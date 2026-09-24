@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>savvyai</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    try {
+      var m = localStorage.getItem('savvy.theme');
+      if (m === 'light' || m === 'dark') document.documentElement.dataset.theme = m;
+    } catch (e) {}
+  </script>
+  <!-- SVG for browsers that take it (themed to the tab bar); the .ico is the fallback badge -->
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
